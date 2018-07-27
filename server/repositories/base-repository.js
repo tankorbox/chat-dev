@@ -19,7 +19,7 @@ export default class BaseRepository {
 		}
 		if (!options.attributes) {
 			options.attributes = {
-				exclude: ['password', 'deletedAt', 'createdAt', 'updatedAt']
+				exclude: ['password', 'deletedAt', 'createdAt']
 			};
 		}
 		return await this._model.findAll(options);

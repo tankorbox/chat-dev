@@ -28,9 +28,14 @@ const validatePassword = (password) => {
 	return regex.test(String(password));
 };
 
+const validateUsername = (username) => {
+	return true;
+};
+
 module.exports = {
 	validate: validate,
 	check: check,
 	validateEmail,
-	validatePassword: validatePassword
+	validatePassword: validatePassword,
+	validateUsername: validateUsername
 };

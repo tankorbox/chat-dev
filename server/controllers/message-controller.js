@@ -1,20 +1,52 @@
-
+import {messageRepository, groupRepository} from '../repositories';
 
 
 export default class MessageController {
-	getMessages = async(req, res) => {
+
+	get = async(req, res) => {
 
 	};
 
-	postMessage = async(req, res) => {
+	create = async(req, res) => {
 
 	};
 
-	putMessage = async(req, res) => {
+	update = async(req, res) => {
 
 	};
 
-	deleteMessage = async(req, res) => {
+	sendTyping = async(req, res) => {
 
-	}
+	};
+
+	clearConversation = async(req, res) => {
+
+	};
+
+	deleteConversation = async(req, res) => {
+
+	};
+
+	sendMessages =async(req, res) => {
+
+	};
+
+
+	getLastMessages = async(req, res) => {
+
+	};
+
+
+
+	sendMessage = async({socket, token, user, body}) => {
+
+	};
+
+	updateMessage = async({socket, token, user, body}) => {
+
+	};
+
+	sendUserTyping = async({socket, token, user, body}) => {
+
+	};
 }

@@ -55,5 +55,7 @@ module.exports = (sequelize, DataTypes) => {
 		//
 	};
 
+	Group.Types = Types;
+
 	return Group;
 };

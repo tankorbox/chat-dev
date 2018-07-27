@@ -5,23 +5,39 @@ import {config} from '../config'
 
 export default class JWTHelper {
 
-	static async verify(key, token) {
-		return new Promise((fulfill, reject) => {
-			JWT.verify(
-				token,
-				key,
-				{
-					algorithm: 'RS256'
-				},
-				(error, decoded) => {
-					if (error) {
-						reject(error);
-					} else {
-						fulfill(decoded);
-					}
+	static getToken(req) {
+		console.log(req);
+		let authorization = null;
+		let token = null;
+		if (req.query && req.query.token) {
+			return req.query.token;
+		} else if (req.authorization) {
+			authorization = req.authorization;
+		} else if (req.headers) {
+			authorization = req.headers.authorization;
+		} else if (req.socket) {
+			if (req.socket.handshake.query && req.socket.handshake.query.token) {
+				return req.socket.handshake.query.token;
+			}
+			authorization = req.socket.handshake.headers.authorization;
+		}
+		if (authorization) {
+			const parts = authorization.split(' ');
+			if (parts.length === 2) {
+				const scheme = parts[0];
+				if (/^Bearer$/i.test(scheme)) {
+					token = parts[1];
 				}
-			)
-		});
+			}
+		}
+		return token;
+	}
+
+	static async verify(token, option) {
+		option = Object.assign({
+			algorithms: 'RS256'
+		}, option);
+		return await JWT.verify(token, jwtCredentials.publicKey, option);
 	}
 
 	static async sign(data, cert) {
@@ -37,7 +53,8 @@ export default class JWTHelper {
 			});
 		return {
 			accessToken: token,
-			expire_in: expired_in
+			expire_in: expired_in,
+			userId : data.id
 		};
 	}
 

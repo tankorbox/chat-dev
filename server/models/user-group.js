@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
 				type: DataTypes.UUID,
 				allowNull: false,
 				references: {
-					model: 'UserGroup',
+					model: 'User',
 					key: 'id',
 					allowNull: false,
 					onDelete: 'CASCADE'
