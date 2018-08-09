@@ -1,10 +1,19 @@
 import {messageRepository, groupRepository} from '../repositories';
-
+import {Response} from '../helpers';
 
 export default class MessageController {
 
-	get = async(req, res) => {
+	//from http request
 
+	get = async(req, res) => {
+		const groupId = req.params.groupId;
+		const user = req.user;
+		const option = {
+			groupId: groupId,
+			userId: user.userId
+		};
+		const messages = await messageRepository.getAll(option);
+		return Response.success(res, messages);
 	};
 
 	create = async(req, res) => {
@@ -31,22 +40,37 @@ export default class MessageController {
 
 	};
 
-
 	getLastMessages = async(req, res) => {
 
 	};
 
-
+	//======================
+	//from web socket request
 
 	sendMessage = async({socket, token, user, body}) => {
-
+		const data = {
+			data: body.message,
+			userId: user.id,
+			groupId: body.groupId
+		};
+		const result = await messageRepository.create(data);
+		socket.to(body.groupId).emit('messages/receive', data);
 	};
 
 	updateMessage = async({socket, token, user, body}) => {
-
+		const data = {
+			data: body.message,
+			userId: user.id,
+			groupId: body.groupId
+		};
+		socket.to(body.groupId).emit('messages/update', data);
 	};
 
 	sendUserTyping = async({socket, token, user, body}) => {
-
+		const groupId = body.groupId;
+		const isTyping = body.isTyping;
+		const displayName = user.dataValues.displayName;
+		socket.to(groupId).emit('messages/typing', {userId: user.id, groupId, isTyping, displayName});
+		return isTyping;
 	};
 }

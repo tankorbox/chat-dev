@@ -6,6 +6,9 @@ import Moment from 'moment';
 
 export default class GroupController {
 
+	//============================
+	//http request handler
+
 	getGroups = async(req,res) => {
 		const limit = req.query.limit;
 		const page = req.query.page;
@@ -35,6 +38,8 @@ export default class GroupController {
 
 	};
 
+	//=============================
+	//socket request handler
 
 	createGroup = async ({socket, token, user, body}) => {
 		if (typeof body.type === 'undefined') {
@@ -42,7 +47,7 @@ export default class GroupController {
 		}
 		switch (body.type) {
 			case Group.Types.PRIVATE:
-				return await this.createIndividualConversation({socket, token, user, body});
+				//TODO
 			case Group.Types.CHATBOT:
 				//TODO
 			case Group.Types.GROUP:
@@ -78,4 +83,21 @@ export default class GroupController {
 		await userGroupRepository.bulkCreate(members);
 		return group;
 	};
+
+	updateGroup = async() => {
+
+	};
+
+	resetGroup = async() => {
+
+	};
+
+	updateMemberGroup = async() => {
+
+	};
+
+	leaveGroup = async() => {
+
+	};
+
 }

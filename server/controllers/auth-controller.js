@@ -36,7 +36,7 @@ export default class AuthController {
 		}
 	};
 
-	 signUp = async (req, res) => {
+	signUp = async (req, res) => {
 		const {username, password, displayName, email} = req.body;
 		if (!validateUsername(username)) {
 			throw new ValidationError('Username is not valid');
@@ -68,8 +68,7 @@ export default class AuthController {
 	verifyUser = async (data) => {
 		const user = await userRepository.get({
 			where: {
-				id: data.id,
-				isActive: true
+				id: data.id
 			}
 		});
 		if (!user) {

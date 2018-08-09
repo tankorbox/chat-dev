@@ -44,7 +44,7 @@ export default class SocketHelper {
 	};
 
 	executeAction = async (socket, {url, data, authorization}) => {
-		const token = JWTHelper.getToken({authorization});
+		const token = JWTHelper.getToken(authorization);
 		const userPayload = await JWTHelper.verify(token);
 		const user = await authController.verifyUser(userPayload);
 		const func = this.router[url];
@@ -55,11 +55,11 @@ export default class SocketHelper {
 	};
 
 	initializeEvent = (socket) => {
-		console.log(socket);
 		socket.on(Method.GET, (payload, callback) => {
 			this.handleEvent(socket, payload, callback);
 		});
 		socket.on(Method.POST, (payload, callback) => {
+			console.log(callback);
 			this.handleEvent(socket, payload, callback);
 		});
 		socket.on(Method.PUT, (payload, callback) => {
@@ -71,20 +71,6 @@ export default class SocketHelper {
 	};
 
 	initializeConnection = async (socket, user) => {
-		if (socket.handshake.query) {
-			const sessionId = socket.handshake.query.sessionId;
-			if (sessionId) {
-				const group = await groupRepository.get({
-					attributes: ['id'],
-					where: {
-						sessionId: sessionId
-					}
-				});
-				if (group) {
-					socket.join(group.id);
-				}
-			}
-		}
 		const groupIds = await userGroupRepository.getAll({
 			attributes: ['groupId'],
 			where: {
@@ -95,6 +81,7 @@ export default class SocketHelper {
 			Logger.info('Socket warning! Have no group be joined.');
 		} else {
 			for (const item of groupIds) {
+				console.log(item.groupId);
 				socket.join(item.groupId);
 			}
 		}
@@ -106,7 +93,9 @@ export default class SocketHelper {
 
 	handleEvent = async (socket, payload, callback) => {
 		try {
+			payload = JSON.parse(payload);
 			const data = await this.executeAction(socket, payload);
+			console.log('sent');
 			callback(null, data);
 		} catch (e) {
 			Logger.error(e);

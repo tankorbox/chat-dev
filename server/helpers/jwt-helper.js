@@ -1,12 +1,12 @@
 'use strict';
 
 import JWT from 'jsonwebtoken';
-import {config} from '../config'
+import {config} from '../config';
+import {jwtCredentials} from '../config';
 
 export default class JWTHelper {
 
-	static getToken(req) {
-		console.log(req);
+	static  getToken(req) {
 		let authorization = null;
 		let token = null;
 		if (req.query && req.query.token) {
@@ -20,6 +20,8 @@ export default class JWTHelper {
 				return req.socket.handshake.query.token;
 			}
 			authorization = req.socket.handshake.headers.authorization;
+		} else if (req.token) {
+			authorization = req.token;
 		}
 		if (authorization) {
 			const parts = authorization.split(' ');
@@ -52,7 +54,7 @@ export default class JWTHelper {
 				expiresIn: expired_in
 			});
 		return {
-			accessToken: token,
+			access_token: token,
 			expire_in: expired_in,
 			userId : data.id
 		};
