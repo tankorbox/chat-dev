@@ -54,7 +54,9 @@ export default class MessageController {
 			groupId: body.groupId
 		};
 		const result = await messageRepository.create(data);
-		socket.to(body.groupId).emit('messages/receive', data);
+		if (result) {
+			socket.to(body.groupId).emit('messages/receive', data);
+		}
 	};
 
 	updateMessage = async({socket, token, user, body}) => {
