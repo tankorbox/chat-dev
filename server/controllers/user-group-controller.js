@@ -5,9 +5,11 @@ export default class UserGroupController {
 	getUserGroup = async(req, res) => {
 		const limit = req.query.limit;
 		const page = req.query.page;
+		const groupId = req.params.groupId;
 		const userGroups = await userGroupRepository.getAll({
-			limit: limit,
-			page: page
+			where: {
+				groupId: groupId
+			}
 		});
 		return Response.success(res, userGroups);
 	};

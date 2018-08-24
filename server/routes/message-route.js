@@ -1,7 +1,10 @@
 import {messageController} from '../controllers';
+import {authController} from '../controllers';
 
 module.exports = (app, router) => {
-	router.route('/messages/:groupId').get(messageController.get);
+	router.route('/messages/:groupId')
+		.get([authController.isAuth],messageController.getMessages);
+
 	router.route('/messages').post(messageController.create);
 	router.route('/messages/multiple').post(messageController.sendMessages);
 	router.route('/lastMessages').get(messageController.getLastMessages);

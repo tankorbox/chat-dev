@@ -8,7 +8,7 @@ export default class BaseRepository {
 
 	async getAll(options) {
 		if (!options.limit) {
-			options.limit = 100;
+			options.limit = 50;
 		} else {
 			options.limit = parseInt(options.limit);
 		}

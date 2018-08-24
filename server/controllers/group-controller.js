@@ -84,20 +84,20 @@ export default class GroupController {
 		return group;
 	};
 
-	updateGroup = async() => {
+	updateGroup = async({socket, token, user, body}) => {
 
 	};
 
-	resetGroup = async() => {
+	resetGroup = async({socket, token, user, body}) => {
 
 	};
 
-	updateMemberGroup = async() => {
+	updateMemberGroup = async({socket, token, user, body}) => {
 
 	};
 
-	leaveGroup = async() => {
-
+	leaveGroup = async({socket, token, user, body}) => {
+		
 	};
 
 }

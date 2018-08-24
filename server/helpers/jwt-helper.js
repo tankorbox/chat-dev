@@ -56,7 +56,7 @@ export default class JWTHelper {
 		return {
 			access_token: token,
 			expire_in: expired_in,
-			userId : data.id
+			id : data.id
 		};
 	}
 

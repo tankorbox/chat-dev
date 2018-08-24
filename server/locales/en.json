@@ -36,7 +36,7 @@
   "MISSING_SECURITY_FIELD": "Sorry, you are missing security field.",
   "MISSING_MESSAGE_BODY": "Sorry, you are missing message body.",
   "MISSING_RECEIVER_ID": "Sorry, you are missing receiver ID.",
-  "BLOCK_MESSAGE": "Sorry, have block."
-
+  "BLOCK_MESSAGE": "Sorry, have block.",
+  "WRONG_OLD_PASSWORD": "You typed wrong current password (old password)"
 
 }

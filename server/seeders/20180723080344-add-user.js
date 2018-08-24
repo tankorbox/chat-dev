@@ -4,12 +4,12 @@ import Faker from 'faker';
 
 module.exports = {
   up: async(queryInterface, Sequelize) => {
-	  	return await userRepository.create({
-		    username: 'tankorbox',
-		    password: '12345678',
-		    email: 'tankorboxdsfdsf@gmail.com',
-		    displayName: 'Hoang Linh Tan',
-	    });
+	  	// return await userRepository.create({
+		 //    username: 'daivi07',
+		 //    password: '12345678',
+		 //    email: 'daivi123456@gmail.com',
+		 //    displayName: 'Dai Vi',
+	    // });
   },
 
   down: (queryInterface, Sequelize) => {

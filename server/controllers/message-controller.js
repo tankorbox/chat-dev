@@ -5,12 +5,16 @@ export default class MessageController {
 
 	//from http request
 
-	get = async(req, res) => {
+	getMessages = async(req, res) => {
 		const groupId = req.params.groupId;
 		const user = req.user;
+		const limit = req.query.limit;
+		const page = req.query.page;
 		const option = {
 			groupId: groupId,
-			userId: user.userId
+			userId: user.id,
+			limit: limit,
+			page: page
 		};
 		const messages = await messageRepository.getAll(option);
 		return Response.success(res, messages);
@@ -53,6 +57,7 @@ export default class MessageController {
 			userId: user.id,
 			groupId: body.groupId
 		};
+		console.log(data);
 		const result = await messageRepository.create(data);
 		if (result) {
 			socket.to(body.groupId).emit('messages/receive', data);

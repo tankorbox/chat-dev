@@ -59,7 +59,6 @@ export default class SocketHelper {
 			this.handleEvent(socket, payload, callback);
 		});
 		socket.on(Method.POST, (payload, callback) => {
-			console.log(callback);
 			this.handleEvent(socket, payload, callback);
 		});
 		socket.on(Method.PUT, (payload, callback) => {
@@ -93,6 +92,7 @@ export default class SocketHelper {
 
 	handleEvent = async (socket, payload, callback) => {
 		try {
+			console.log(payload);
 			payload = JSON.parse(payload);
 			const data = await this.executeAction(socket, payload);
 			console.log('sent');

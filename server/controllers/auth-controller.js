@@ -1,11 +1,11 @@
-
-
 import {validateEmail, validatePassword, validateUsername} from "../helpers/validate-helper";
 import {ValidationError, AuthorizationError, NotFoundError} from '../errors';
 import {userRepository} from '../repositories';
 import Path from 'path';
 import FS from 'fs';
 import {JWTHelper, Response} from "../helpers";
+import JWT from 'jsonwebtoken';
+import HTTPStatus from 'http-status';
 
 export default class AuthController {
 
@@ -83,6 +83,53 @@ export default class AuthController {
 			...data,
 			...user
 		};
+	};
+
+	isAuth = async (req, res, next) => {
+		let token;
+
+		if (req.headers && req.headers.authorization) {
+			let parts = req.headers.authorization.split(' ');
+			if (parts.length === 2) {
+				const scheme = parts[0];
+				const credentials = parts[1];
+				if (/^Bearer$/i.test(scheme)) {
+					token = credentials;
+				}
+			} else {
+				next(new Error('Format is Authorization: Bearer [token]'));
+				return;
+			}
+		} else if (req.params.token) {
+			token = req.params.token;
+			delete req.query.token;
+		} else {
+			next(new Error('No Authorization header was found'), HTTPStatus.UNAUTHORIZED);
+			return;
+		}
+
+		const path = Path.resolve(__dirname, '..', 'config', 'cert', 'public.key');
+		const cert = FS.readFileSync(path);
+		JWT.verify(token, cert, {algorithms: ['RS256']}, async (error, payload) => {
+			if (error) {
+				throw new Error(error);
+			}
+			try {
+				const user = await userRepository.get({
+					where: {
+						id: payload.id
+					}
+				});
+				if (!user) {
+					next(new Error('USER_NOT_FOUND'));
+					return;
+				}
+				req.user = user;
+				next();
+			} catch (error) {
+				next(error)
+			}
+		});
 	};
 
 	signOut = async(req, res) => {
